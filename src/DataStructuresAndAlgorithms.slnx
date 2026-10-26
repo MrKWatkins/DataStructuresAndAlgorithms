@@ -1,0 +1,20 @@
+<Solution>
+  <Folder Name="/Solution Items/">
+    <File Path="../AGENTS.md" />
+    <File Path="../global.json" />
+    <File Path="../.gitignore" />
+    <File Path="../LICENSE" />
+    <File Path="../README.md" />
+    <File Path="Directory.Build.props" />
+    <File Path="Directory.Packages.props" />
+  </Folder>
+  <Folder Name="/Solution Items/.github/">
+    <File Path="../.github/dependabot.yml" />
+  </Folder>
+  <Folder Name="/Solution Items/.github/workflows/">
+    <File Path="../.github/workflows/build.yml" />
+    <File Path="../.github/workflows/dependabot-merge.yml" />
+  </Folder>
+  <Project Path="MrKWatkins.DataStructuresAndAlgorithms.Tests/MrKWatkins.DataStructuresAndAlgorithms.Tests.csproj" />
+  <Project Path="MrKWatkins.DataStructuresAndAlgorithms/MrKWatkins.DataStructuresAndAlgorithms.csproj" />
+</Solution>

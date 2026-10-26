@@ -1,41 +1,41 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using JetBrains.Annotations;
-
 namespace MrKWatkins.DataStructuresAndAlgorithms;
 
+/// <summary>Orders items so that each item follows its dependencies.</summary>
 public static class TopologicalOrderExtensions
 {
+    /// <summary>Orders items so that dependencies appear before the items that depend on them.</summary>
+    /// <exception cref="CycleException">The dependencies contain a cycle.</exception>
     [Pure]
-    [NotNull]
-    [ItemNotNull]
-    public static IEnumerable<T> TopologicalOrder<T>([NotNull] [ItemNotNull] this IEnumerable<T> source, [NotNull] Func<T, IEnumerable<T>> dependentOnSelector)
+    public static IEnumerable<T> TopologicalOrder<T>(this IEnumerable<T> source, Func<T, IEnumerable<T>> dependentOnSelector)
+        where T : notnull
         => source.TopologicalOrder(dependentOnSelector, item => item);
-        
+
+    /// <summary>Orders items so that dependencies appear before the items that depend on them.</summary>
+    /// <exception cref="CycleException">The dependencies contain a cycle.</exception>
     [Pure]
-    [NotNull]
-    [ItemNotNull]
-    public static IEnumerable<T> TopologicalOrder<T>([NotNull] [ItemNotNull] this IEnumerable<T> source, [NotNull] Func<T, IEnumerable<T>> dependentOnSelector, [NotNull] IEqualityComparer<T> comparer)
+    public static IEnumerable<T> TopologicalOrder<T>(this IEnumerable<T> source, Func<T, IEnumerable<T>> dependentOnSelector, IEqualityComparer<T> comparer)
+        where T : notnull
         => source.TopologicalOrder(dependentOnSelector, item => item, comparer);
-        
+
+    /// <summary>Orders items so that dependencies appear before the items that depend on them.</summary>
+    /// <exception cref="CycleException">The dependencies contain a cycle.</exception>
     [Pure]
-    [NotNull]
-    [ItemNotNull]
-    public static IEnumerable<T> TopologicalOrder<T, TKey>([NotNull] [ItemNotNull] this IEnumerable<T> source, [NotNull] Func<T, IEnumerable<T>> dependentOnSelector, [NotNull] Func<T, TKey> keySelector)
+    public static IEnumerable<T> TopologicalOrder<T, TKey>(this IEnumerable<T> source, Func<T, IEnumerable<T>> dependentOnSelector, Func<T, TKey> keySelector)
+        where TKey : notnull
         => source.TopologicalOrder(dependentOnSelector, keySelector, EqualityComparer<TKey>.Default);
-        
+
+    /// <summary>Orders items so that dependencies appear before the items that depend on them.</summary>
+    /// <exception cref="CycleException">The dependencies contain a cycle.</exception>
     [Pure]
-    [NotNull]
-    [ItemNotNull]
-    public static IEnumerable<T> TopologicalOrder<T, TKey>([NotNull] [ItemNotNull] this IEnumerable<T> source, [NotNull] Func<T, IEnumerable<T>> dependentOnSelector, [NotNull] Func<T, TKey> keySelector, [NotNull] IEqualityComparer<TKey> keyComparer)
+    public static IEnumerable<T> TopologicalOrder<T, TKey>(this IEnumerable<T> source, Func<T, IEnumerable<T>> dependentOnSelector, Func<T, TKey> keySelector, IEqualityComparer<TKey> keyComparer)
+        where TKey : notnull
     {
         // Use a stack to keep a track of the path we're currently taking through the graph. This isn't necessary for the algorithm
         // itself but it useful if we hit a cycle as we can then include details of the cycle in the exception we throw.
         var stack = new Stack<T>();
-            
+
         // Keep track of the nodes we've visited. An entry means we've visited it. If the value stored against the node is true then
-        // we are currently processing that node and nodes dependent on it. false means we've seen it already but it's not in the 
+        // we are currently processing that node and nodes dependent on it. false means we've seen it already but it's not in the
         // current path through the graph.
         var visited = new Dictionary<TKey, bool>(keyComparer);
 
@@ -43,8 +43,8 @@ public static class TopologicalOrderExtensions
     }
 
     [Pure]
-    [NotNull]
-    private static IEnumerable<T> Visit<T, TKey>([NotNull] T node, [NotNull] Func<T, IEnumerable<T>> dependentOnSelector, [NotNull] Func<T, TKey> keySelector, [NotNull] Stack<T> stack, [NotNull] Dictionary<TKey, bool> visited)
+    private static IEnumerable<T> Visit<T, TKey>(T node, Func<T, IEnumerable<T>> dependentOnSelector, Func<T, TKey> keySelector, Stack<T> stack, Dictionary<TKey, bool> visited)
+        where TKey : notnull
     {
         // Store the current node in the stack.
         stack.Push(node);
@@ -64,7 +64,7 @@ public static class TopologicalOrderExtensions
                 // Yes we are. That means we have a cycle, as this node is dependent upon itself.
                 throw new CycleException("Cyclic dependency found.", stack.Cast<object>().Reverse());
             }
-                
+
             // If we reach here we have visited the node already so don't need to do anything further.
         }
         else
